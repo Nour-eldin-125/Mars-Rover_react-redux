@@ -36,6 +36,7 @@ class InputDirection extends React.Component {
     render() {
         return (
             <>
+                <h3>Rover Commands</h3>
                 <input type="text"  id="inp"/>
                 <button onClick= {() => {this.checkData()}}>Submit</button>
             </>
