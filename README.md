@@ -22,3 +22,12 @@ Technology used will be react and react-redux for manpulating the state of the r
 2. second create the function conpmonet that contains the code for handeling the rover movement and changing the direction of the rover.
 
 3. returning the rover object and updating the state and printing the value of the rover after each update till the command ends and return the value of the coordinates and the direction.
+
+### Part 2:
+Previous missions have had to be aborted due to obstacles that caused damage to the rover. Given a set of coordinates for all the known obstacles in the format: ```[[1,4], [3,5], [7,4]]```
+When the rover would enter a coordinate with an obstacle, instead stop at the coordinate immediately before and report position, heading and Stopped due to collision, e.g. (3, 4) WEST STOPPED
+
+### Solution:
+1. create function to add obstacles
+2. create function to check if the next step contains obstacle or not.
+3. go forward if ok or stop and report if obstacle.
