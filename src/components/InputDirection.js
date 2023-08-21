@@ -24,6 +24,8 @@ class InputDirection extends React.Component {
         let inp = document.getElementById("inp");
         if (!(inp.value.match("^[FLBRflbr]+$"))) {
             alert("Invalid Input");
+            inp.value = ""
+            return
         }
     }
 
