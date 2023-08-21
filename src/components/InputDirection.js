@@ -22,13 +22,8 @@ class InputDirection extends React.Component {
 
     checkData() {
         let inp = document.getElementById("inp");
-        for (let i in inp.value) {
-            if (!(inp[i] in ['F',"L","R","B"])) {
-                alert("Invalid Input");
-                inp.value = ""
-                return;
-            }
-            
+        if (!(inp.value.match("^[FLBRflbr]+$"))) {
+            alert("Invalid Input");
         }
     }
 
