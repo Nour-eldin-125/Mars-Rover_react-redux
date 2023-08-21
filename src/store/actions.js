@@ -1,5 +1,6 @@
 export const actionType = {
-    submitData: "SUBMITDATA"
+    submitData: "SUBMITDATA",
+    addObstacle: "ADDOBSTACLE",
 }
 
 
@@ -9,3 +10,10 @@ export function Submit(payload){
         payload
     }
 }
+export function addObstacle(payload){
+    return {
+        type : actionType.addObstacle, 
+        payload
+    }
+}
+
