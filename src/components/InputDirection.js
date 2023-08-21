@@ -1,5 +1,6 @@
 import React from "react";
-import { ReactDOM } from "react";
+import { connect } from "react-redux";
+import { Submit } from "../store/actions";
 
 class InputDirection extends React.Component {
     constructor(props) {
@@ -27,6 +28,9 @@ class InputDirection extends React.Component {
             inp.value = ""
             return
         }
+        for (let i in inp.value) {
+            this.props.submitData(inp.value[i].toLowerCase());
+        }
     }
 
     render() {
@@ -38,5 +42,10 @@ class InputDirection extends React.Component {
             )
     }
 }
+const mapDispatchToProps = (dispatch)=>{
+    return {
+        submitData: (payload) => dispatch(Submit(payload))
+    }
+}
 
-export default InputDirection;
+export default connect (null, mapDispatchToProps)(InputDirection);
