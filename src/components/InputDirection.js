@@ -5,22 +5,8 @@ import { Submit } from "../store/actions";
 class InputDirection extends React.Component {
     constructor(props) {
         super(props);
-        this.state = {
-            x_value: 0,
-            y_vlaue: 0,
-            direction: "NORTH",
-        };
     }
-    componentDidUpdate(prevProps) {
-        if (prevProps != this.props) {
-            this.setState({
-                x_value: this.props.x_value,
-                y_vlaue: this.props.y_value,
-                direction: this.props.direction,
-            });
-        }
-    }
-
+    
     checkData() {
         let inp = document.getElementById("inp");
         if (!(inp.value.match("^[FLBRflbr]+$"))) {
@@ -32,14 +18,30 @@ class InputDirection extends React.Component {
             this.props.submitData(inp.value[i].toLowerCase());
         }
     }
+    
+    search() {
+        let inp = document.getElementById("goalSearch");
+        if (!(inp.value.match("^[0-9 -]+,[0-9 -]+$"))) {
+            alert("Invalid Input");
+            inp.value = ""
+            return
+        }
+        // console.log("INput : ", inp.value.split(","));
+        // this.props.submitData(inp.value);
+    }
 
     render() {
         return (
-            <>
-                <h3>Rover Commands</h3>
-                <input type="text"  id="inp"/>
-                <button onClick= {() => {this.checkData()}}>Submit</button>
-            </>
+                <>
+                    <h3>Rover Commands</h3>
+                    <p>Command Rover to location: </p>
+                    <input type="text"  id="inp"/>
+                    <button onClick= {() => {this.checkData()}}>Submit</button>
+                    <br/>
+                    <p>Auto Search for Goal: </p>
+                    <input type="text"  id="goalSearch"/>
+                    <button placeholder="eg. 1,1 " onClick= {() => {this.search()}}>Search</button>
+                </>
             )
     }
 }
