@@ -59,7 +59,10 @@ function checkSafe(state){
     if(state.obstacles.some(obs => obs[0] == state.x_value && obs[1] == state.y_value)){
         return false;
     }
-    return true;
+    else if (state.safe.valid)
+        return true;
+    else 
+        return false
 }
 
 export default function reducer(state = initialState, action) {

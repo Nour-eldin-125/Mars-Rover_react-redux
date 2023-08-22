@@ -9,7 +9,7 @@ class Obstacles extends React.Component {
         let x_value = document.getElementById("inp_obstacle_x").value;
         let y_value = document.getElementById("inp_obstacle_y").value;
         let obs = [x_value,y_value];
-        if(this.props.obstacles.some(obs => obs[0] == obs[0] && obs[1] == obs[1])){
+        if(this.props.obstacles.some(obstacle => obstacle[0] == obs[0] && obstacle[1] == obs[1])){
             alert("obstacle already exists");
             return
         }
