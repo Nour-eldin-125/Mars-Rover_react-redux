@@ -74,6 +74,9 @@ export default function reducer(state = initialState, action) {
         case actionType.addObstacle: {
             return {...state, obstacles: [...state.obstacles, action.payload]};
         }
+        case actionType.reset: {
+            return {...initialState};
+        }
 		default: {
 			return {...state};
 		}

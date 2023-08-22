@@ -1,6 +1,7 @@
 export const actionType = {
     submitData: "SUBMITDATA",
     addObstacle: "ADDOBSTACLE",
+    reset: "RESET",
 }
 
 
@@ -16,4 +17,8 @@ export function addObstacle(payload){
         payload
     }
 }
-
+export function Reset(){
+    return {
+        type : actionType.reset, 
+    }
+}

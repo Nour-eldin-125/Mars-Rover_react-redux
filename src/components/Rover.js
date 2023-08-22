@@ -1,19 +1,13 @@
 import React from "react";
 import { connect } from "react-redux";
+import { Reset } from "../store/actions";
 
 class Rover extends React.Component {
 	constructor(props) {
 		super(props);
 	}
-	componentDidUpdate(prevProps) {
-		if (prevProps != this.props) {
-			console.log(this.props.x_value);
-		}
-	}
-
-
+	
 	render() {
-		console.log(this.props)
 		return (
 			<div>
 				<>
@@ -30,6 +24,7 @@ class Rover extends React.Component {
 							</>
 					}
 				</>
+				<button onClick={()=>this.props.reset()}>Reset</button>
 			</div>
 		);
 	}
@@ -45,4 +40,10 @@ const mapStateToProps = (state) => {
 	}
 }
 
-export default connect(mapStateToProps, null)(Rover);
+const mapDispatchToProps = (dispatch)=>{
+	return {
+		reset: () => dispatch(Reset())
+	}
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Rover);
