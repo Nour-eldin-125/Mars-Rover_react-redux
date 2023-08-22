@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="styles.css">
+  <title>Interactive Grid Example</title>
+
+  <style>
+body{
+  margin: 0;
+  padding-left: 10%;
+  padding-right: 10%;
+  padding-top:5%;
+}
+img{
+    width: 30%;
+}
+.grid-item{
+    background: url("./public/mars_v0.jpg");
+    border-radius: 10%;
+    background-attachment: fixed;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    
+}
+.grid-container {
+  display: grid;
+  grid-gap:5px;
+  grid-template-columns: repeat(10, 1fr);
+  grid-template-rows: repeat(10, 1fr);
+  
+}
+
+.grid-container{
+    height: 70vh;
+    background-size: cover;
+    background-attachment: fixed;
+}
+  </style>
+</head>
+<body>
+  
+  <main>
+    
+
+        <div class="grid-container" id="gridContainer">
+            <!-- JavaScript will add grid cells here -->
+            <!-- Grid cells will be added here -->
+            <!-- Inside the .grid-container div -->
+            
+            <!-- ... Repeat for 50 cells ... -->
+        </div>
+    
+    </main>
+  
+  <script>
+    // Get the grid container element
+const gridContainer = document.getElementById("gridContainer");
+
+// Create 50 grid cells
+for (let i = 1; i <= 100; i++) {
+  const cell = document.createElement("div");
+  cell.className = "grid-item";
+  // Create an image element and set its attributes
+  const image = document.createElement("img");
+    image.src = "./public/rover.png"; // Replace with your image path
+    image.alt = "Grid Image"; // Set alternative text for accessibility
+
+    // Append the image to the cell
+    cell.appendChild(image);
+  gridContainer.appendChild(cell);
+}
+  </script>
+</body>
+</html>
