@@ -16,24 +16,20 @@ class Rover extends React.Component {
 		console.log(this.props)
 		return (
 			<div>
-                
-				{
-				this.props.safe.valid &&<>
+				<>
 					<p>
-                    	the rover X position is {this.props.x_value + " "} 
-                    	and Y position is {this.props.y_value} 
-                    	<br/> The Direction is  {this.props.direction}</p>
-					<p>Obstacles : {this.props.obstacles?.map((obs)=>"["+obs+"]")}</p>
+                    	the rover position is {"("+this.props.x_value + ", " +
+						 this.props.y_value + ", " + this.props.direction +")"} 
+						<br/>
+						Obstacles : {this.props.obstacles?.map((obs)=>"["+obs+"]")}</p>
+					{
+						!this.props.safe.valid && 
+							<>
+								<h3 style={{"color":"red"}}>Rover Has Stopped</h3>
+								<p>{this.props.safe.report}</p>
+							</>
+					}
 				</>
-				}
-				{
-					!this.props.safe.valid && 
-						<>
-							<h3>Rover Has Stopped</h3>
-							<p>{this.props.safe.report}</p>
-
-						</>
-				}
 			</div>
 		);
 	}
