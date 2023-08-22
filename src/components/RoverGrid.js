@@ -10,23 +10,33 @@
             "NORTH":"rover_top.png",
             "EAST":"rover_right.png",
             "SOUTH":"rover_bot.png",
-            "WEST":"rover_left.png"
+            "WEST":"rover_left.png",
+            "OBSTACLE":"obstacle.png",
+            "GOAL": "goal.png"
         }
  	}
      componentDidMount() {
-         this.createRoverImg(this.props.x_value,this.props.y_value)
+         this.createRoverImg(this.props.x_value,this.props.y_value,"Rover")
         }
     componentDidUpdate() {
-        this.createRoverImg(this.props.x_value,this.props.y_value)
+        this.createRoverImg(this.props.x_value,this.props.y_value,"Rover")
+        this.props.obstacles.map(obs => this.createRoverImg(obs[0],obs[1],"Obstacle"))
     }
-        
-    createRoverImg(x,y){
-        document.getElementById("img_"+this.num)?.setAttribute("src","")
+    
+    createRoverImg(x,y,img){
         let number = this.getNumberOfRovers(x,y);
         let rover = document.getElementById("img_"+number);
-        rover.setAttribute("src", this.roverImgfromdirection[this.props.direction])
-        this.num = number
+        
+        if(img == "Rover"){
+            document.getElementById("img_"+this.num)?.setAttribute("src","")
+            rover.setAttribute("src", this.roverImgfromdirection[this.props.direction])
+            this.num = number
+        }else{
+            rover.setAttribute("src", this.roverImgfromdirection.OBSTACLE)
+        }
+
     }
+
     getNumberOfRovers(x,y){
         while (x<0)
             x+=10
