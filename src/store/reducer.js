@@ -5,6 +5,10 @@ const initialState = {
 	y_value: 0,
 	direction: "NORTH",
     obstacles: [],
+    safe: {
+        valid: true,
+        report:""
+    }
 };
 const directions = ["NORTH", "EAST", "SOUTH", "WEST"];
 
@@ -50,10 +54,22 @@ function calculateNextStep(state,action){
         };
     }
 }
+
+function checkSafe(state){
+    if(state.obstacles.some(obs => obs[0] == state.x_value && obs[1] == state.y_value)){
+        return false;
+    }
+    return true;
+}
+
 export default function reducer(state = initialState, action) {
 	switch (action.type) {
 		case actionType.submitData: {
-			return calculateNextStep(state,action);
+            let newState = calculateNextStep(state,action);
+            if(checkSafe(newState)){
+                return {...newState} 
+            }
+			return {...state, safe: {...newState.safe, valid: false, report: "Obstacle in the location: ["+ newState.x_value+","+newState.y_value+"]"+""}};
 		}
         case actionType.addObstacle: {
             return {...state, obstacles: [...state.obstacles, action.payload]};
