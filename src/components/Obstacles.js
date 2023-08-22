@@ -21,9 +21,9 @@ class Obstacles extends React.Component {
             <>
                 <h3>Obstacles</h3>
                 <label>X value : </label>
-                <input type="text"  id="inp_obstacle_x"/>
+                <input type="number"  id="inp_obstacle_x"/>
                 <label> Y value : </label>
-                <input type="text"  id="inp_obstacle_y"/>
+                <input type="number"  id="inp_obstacle_y"/>
                 <button onClick= {() => {this.addObs()}}>Submit</button>
             </>
         )
