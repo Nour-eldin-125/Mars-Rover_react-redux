@@ -1,8 +1,7 @@
 # Mars Rover : 
 ## Problem definition:
 ### Part 1:
-The rover is given a command string which contains multiple commands. This string must then be 
-broken into each individual command and that command then executed. The valid commands are:
+The rover is given a command string which contains multiple commands. This string must then be broken into each individual command and that command then executed. The valid commands are:
 ```
 F -> Move forward on current heading 
 B -> Move backwards on current heading 
@@ -11,8 +10,7 @@ R -> Rotate right by 90 degrees
 ```
 An example command might be ``` 
 FLFFFRFLB ``` 
-the rover reports it’s current coordinates 
-and heading in the format ``` (-2, 2) WEST ``` (negative coordinates are valid.)
+the rover reports it’s current coordinates and heading in the format ``` (-2, 2) WEST ``` (negative coordinates are valid.)
 
 ### Solution : 
 Technology used will be react and react-redux for manpulating the state of the rover.
@@ -31,3 +29,12 @@ When the rover would enter a coordinate with an obstacle, instead stop at the co
 1. create function to add obstacles
 2. create function to check if the next step contains obstacle or not.
 3. go forward if ok or stop and report if obstacle.
+
+### Part 3:
+Given the rover’s current position and heading, plus the known obstacles, calculate a command string for the rover that will safely move it to a given coordinate avoiding all obstacles.
+
+### Solution:
+1. create function for calculating the shortest path.
+2. create function to validate that the path doesnot contain any obstacles.
+3. create function to validate other options that can make a path to go to the goal with no obstacles.
+4. Loop on the functions till the rover finds the path to the goal with no obstacles.
