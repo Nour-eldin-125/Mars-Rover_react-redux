@@ -23,6 +23,13 @@ class Rover extends React.Component {
 								<p>{this.props.safe.report}</p>
 							</>
 					}
+					{
+						this.props.goal.reached && 
+							<>
+								<h3 style={{"color":"Green"}}>Rover Reached Goal</h3>
+								<p>Goal {" ["+this.props.goal.coord+"]"}</p>
+							</>
+					}
 				</>
 				<button onClick={()=>this.props.reset()}>Reset</button>
 			</div>
@@ -37,6 +44,7 @@ const mapStateToProps = (state) => {
 		direction: state.direction,
 		obstacles: state.obstacles,
 		safe: state.safe,
+		goal: state.goal
 	}
 }
 
