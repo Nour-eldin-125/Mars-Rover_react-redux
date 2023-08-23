@@ -2,7 +2,8 @@ export const actionType = {
     submitData: "SUBMITDATA",
     addObstacle: "ADDOBSTACLE",
     reset: "RESET",
-    addGoal: "ADDGOAL"
+    addGoal: "ADDGOAL",
+    startAutoSearch: "STARTAUTOSERACH"
 }
 
 
@@ -28,5 +29,11 @@ export function addGoal(payload){
 export function Reset(){
     return {
         type : actionType.reset, 
+    }
+}
+
+export function startAutoSearch(){
+    return {
+        type : actionType.startAutoSearch, 
     }
 }
