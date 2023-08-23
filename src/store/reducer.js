@@ -9,7 +9,10 @@ const initialState = {
         valid: true,
         report:""
     },
-    goal:[]
+    goal:{
+        coord:[],
+        reached:false,
+    }
 };
 const directions = ["NORTH", "EAST", "SOUTH", "WEST"];
 
@@ -66,11 +69,23 @@ function checkSafe(state,x,y){
         return false
 }
 
+function reachedGoal(state){
+    if (state.goal.coord[0]== state.x_value && state.goal.coord[1] == state.y_value){
+        return true
+    }
+    else{
+        return false
+    }
+}
+
 export default function reducer(state = initialState, action) {
 	switch (action.type) {
 		case actionType.submitData: {
             let newState = calculateNextStep(state,action);
             if(checkSafe(newState,newState.x_value,newState.y_value)){
+                if(reachedGoal(newState)){
+                    return {...state, goal: {...state.goal,reached:true}};
+                }
                 return {...newState} 
             }
 			return {...state, safe: {...newState.safe, valid: false, report: "Obstacle in the location: ["+ newState.x_value+","+newState.y_value+"]"+""}};
@@ -82,7 +97,7 @@ export default function reducer(state = initialState, action) {
             return {...initialState};
         }
         case actionType.addGoal: {
-            return {...state, goal: action.payload};
+            return {...state, goal: {...state.goal,coord : action.payload,reached:reachedGoal(state)}};
         }
 		default: {
 			return {...state};
