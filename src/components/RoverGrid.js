@@ -23,7 +23,7 @@
         this.createRoverImg(this.props.x_value,this.props.y_value,"Rover")
         this.props.obstacles.map(obs => this.createRoverImg(obs[0],obs[1],"Obstacle"))
         if (this.props.goal!=[])
-            this.createRoverImg(this.props.goal[0],this.props.goal[1],"Goal")
+            this.createRoverImg(this.props.goal.coord[0],this.props.goal.coord[1],"Goal")
     }
     
     createRoverImg(x,y,img){
