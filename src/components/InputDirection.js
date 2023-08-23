@@ -1,6 +1,6 @@
 import React from "react";
 import { connect } from "react-redux";
-import { Submit , addGoal } from "../store/actions";
+import { Submit , addGoal, startAutoSearch } from "../store/actions";
 
 class InputDirection extends React.Component {
     constructor(props) {
@@ -19,7 +19,7 @@ class InputDirection extends React.Component {
         }
     }
     
-    search() {
+    createGoal() {
         let inp = document.getElementById("goalSearch");
         if (!(inp.value.match("^[0-9 -]+,[0-9 -]+$"))) {
             alert("Invalid Input");
@@ -29,6 +29,10 @@ class InputDirection extends React.Component {
 
         // console.log("INput : ", inp.value.split(","));
         this.props.addGoal(inp.value.split(","));
+    }
+    
+    search() {
+        this.props.startAutoSearch()
     }
 
     render() {
@@ -41,7 +45,8 @@ class InputDirection extends React.Component {
                     <br/>
                     <p>Auto Search for Goal: </p>
                     <input type="text"  id="goalSearch"/>
-                    <button placeholder="eg. 1,1 " onClick= {() => {this.search()}}>Search</button>
+                    <button placeholder="eg. 1,1 " onClick= {() => {this.createGoal()}}>Search</button>
+                    <button onClick= {() => {this.search()}}>GO</button>
                 </>
             )
     }
@@ -49,7 +54,8 @@ class InputDirection extends React.Component {
 const mapDispatchToProps = (dispatch)=>{
     return {
         submitData: (payload) => dispatch(Submit(payload)),
-        addGoal: (payload) => dispatch(addGoal(payload))
+        addGoal: (payload) => dispatch(addGoal(payload)),
+        startAutoSearch: () => dispatch(startAutoSearch())
     }
 }
 
