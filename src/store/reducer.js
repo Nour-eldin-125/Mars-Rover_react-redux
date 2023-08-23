@@ -8,7 +8,8 @@ const initialState = {
     safe: {
         valid: true,
         report:""
-    }
+    },
+    goal:[]
 };
 const directions = ["NORTH", "EAST", "SOUTH", "WEST"];
 
@@ -55,8 +56,8 @@ function calculateNextStep(state,action){
     }
 }
 
-function checkSafe(state){
-    if(state.obstacles.some(obs => obs[0] == state.x_value && obs[1] == state.y_value)){
+function checkSafe(state,x,y){
+    if(state.obstacles.some(obs => obs[0] == x && obs[1] == y)){
         return false;
     }
     else if (state.safe.valid)
@@ -69,7 +70,7 @@ export default function reducer(state = initialState, action) {
 	switch (action.type) {
 		case actionType.submitData: {
             let newState = calculateNextStep(state,action);
-            if(checkSafe(newState)){
+            if(checkSafe(newState,newState.x_value,newState.y_value)){
                 return {...newState} 
             }
 			return {...state, safe: {...newState.safe, valid: false, report: "Obstacle in the location: ["+ newState.x_value+","+newState.y_value+"]"+""}};
@@ -79,6 +80,9 @@ export default function reducer(state = initialState, action) {
         }
         case actionType.reset: {
             return {...initialState};
+        }
+        case actionType.addGoal: {
+            return {...state, goal: action.payload};
         }
 		default: {
 			return {...state};
