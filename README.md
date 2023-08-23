@@ -34,7 +34,8 @@ When the rover would enter a coordinate with an obstacle, instead stop at the co
 Given the rover’s current position and heading, plus the known obstacles, calculate a command string for the rover that will safely move it to a given coordinate avoiding all obstacles.
 
 ### Solution:
-1. create function for calculating the shortest path.
-2. create function to validate that the path doesnot contain any obstacles.
-3. create function to validate other options that can make a path to go to the goal with no obstacles.
-4. Loop on the functions till the rover finds the path to the goal with no obstacles.
+1. Calculate the shortest distance between the goal and the rover
+2. choose the path to reach the goal
+3. check if there is a obstacle ahead if exits get another root to the goal 
+4. repeat steps from 1 to 3 till the rover reaches the goal each time the rover steps
+5. return the path the rover chose draw the path for the rover
