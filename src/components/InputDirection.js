@@ -1,6 +1,6 @@
 import React from "react";
 import { connect } from "react-redux";
-import { Submit } from "../store/actions";
+import { Submit , addGoal } from "../store/actions";
 
 class InputDirection extends React.Component {
     constructor(props) {
@@ -26,8 +26,9 @@ class InputDirection extends React.Component {
             inp.value = ""
             return
         }
+
         // console.log("INput : ", inp.value.split(","));
-        // this.props.submitData(inp.value);
+        this.props.addGoal(inp.value.split(","));
     }
 
     render() {
@@ -47,7 +48,8 @@ class InputDirection extends React.Component {
 }
 const mapDispatchToProps = (dispatch)=>{
     return {
-        submitData: (payload) => dispatch(Submit(payload))
+        submitData: (payload) => dispatch(Submit(payload)),
+        addGoal: (payload) => dispatch(addGoal(payload))
     }
 }
 
