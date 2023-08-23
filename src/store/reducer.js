@@ -88,6 +88,187 @@ function reachedGoal(state){
     }
 }
 
+/*
+steps to proceed in the direction for the goal : 
+1. Calculate the shortest distance between the goal and the rover
+2. choose the path to reach the goal
+3. check if there is a obstacle ahead if exits get another root to the goal 
+4. repeat steps from 1 to 3 till the rover reaches the goal each time the rover steps
+5. return the path the rover chose draw the path for the rover
+*/
+// calculate the real value of the axis from 0 to 9 :
+function getRealValue(axis){
+    while (axis<0)
+        axis+=10
+    axis %= 10
+    return axis;
+}
+
+// calculate the diffrence between the goal and the axis 
+function distanceDiffernece(axis,goal){
+    return (goal - axis);
+}
+
+// check which axis have larger distance to cover with no obstacles
+function maxDistanceCovered(axisValue,axisGoal,z,axisIdentifier,state){
+    let distance
+    let maxDistance = 0
+    while (axisValue!=axisGoal){
+        distance = distanceDiffernece(axisValue,axisGoal);
+        if (distance < 0){
+            axisValue--;
+            maxDistance--
+        }
+        else{
+            axisValue++;
+            maxDistance++
+        }
+        if (axisIdentifier == "x"){
+            if (checkSafe(state,axisValue,z)){
+                continue
+            }
+            else{
+                maxDistance < 0 ? maxDistance++ : maxDistance-- 
+                break
+            }
+        }
+        else{
+            if (checkSafe(state,z,axisValue)){
+                continue
+            }
+            else{
+                maxDistance < 0 ? maxDistance++ : maxDistance-- 
+                break
+            }
+        }
+    }
+    return maxDistance
+}
+
+
+/**
+ * Calculates the weight of alternative pathes.
+ *
+ * @param {number} axisValue - the X coordinate
+ * @param {number} z - the Y coordinate
+ * @param {number[]} goal - the goal coordinate
+ * @param {string} state - the state value
+ * @param {string} axisIdentifier - the axis identifier
+ * @param {number} direction - the direction value 
+ * @return {number} the weight of alternative pathes
+ */
+function weightAlternativePathes(axisValue,goal,z,axisIdentifier,state,direction){
+    let axis = axisValue;
+    let constantAxis = z;
+    let axisGoal
+    
+    if (axisIdentifier == "x"){
+        axisGoal = goal[1]
+        axisIdentifier = "y"
+    }
+    else{
+        axisIdentifier = "x"
+        axisGoal = goal[0]
+    }
+    let pathDirection = axis
+    let directionCounter = 0
+    
+    let maxDis = 0
+    while(maxDis==0){
+        pathDirection += (1*direction) 
+        directionCounter++
+        pathDirection = getRealValue(pathDirection);
+        maxDis = maxDistanceCovered(constantAxis,axisGoal,pathDirection,axisIdentifier,state);
+    }
+    return directionCounter
+}
+
+function getAlternativePath(state,x,y,goal){
+    let xdiff = distanceDiffernece(x,goal[0]);
+    let ydiff = distanceDiffernece(y,goal[1]);
+    // vertical Line
+    if(xdiff == 0){
+        let left = weightAlternativePathes(x,goal,y,"x",state,-1);        
+        let right = weightAlternativePathes(x,goal,y,"x",state,1);   
+        if (left < right){
+            return [-1,left]
+        }
+        else{
+            return [1,right]
+        }
+    }
+    // horizontal Line
+    else{
+        let bot = weightAlternativePathes(y,goal,x,"y",state,-1);        
+        let top = weightAlternativePathes(y,goal,x,"y",state,1);
+        if (bot < top){
+            return [-1,bot]
+        }
+        else{
+            return [1,top]
+        }   
+    }
+}
+// 2. choose the path to reach the goal
+function pathToGoal(state,goal){
+    
+    let x = getRealValue(state.x_value);
+    let y = getRealValue(state.y_value);
+    goal = [(getRealValue(goal[0])),(getRealValue(goal[1]))];
+    console.log("goal : ",goal," x : ",x," y : ",y)
+    while (x!=goal[0] || y!=goal[1]){
+        let maxDX = maxDistanceCovered(x,goal[0],y,"x",state);
+        let maxDY = maxDistanceCovered(y,goal[1],x,"y",state);
+        console.log("maxDX : ",maxDX," maxDY : ",maxDY)
+        console.log(x!=goal[0] && y!=goal[1])
+        let directionsOffset
+        if (Math.abs(maxDX) > Math.abs(maxDY)){
+            maxDX <0 ? directionsOffset = -1 : directionsOffset = 1;
+            [...Array(Math.abs(maxDX)).keys()].map((i) => {
+                state.path.push([getRealValue(x+(i+1)*directionsOffset),y]);
+                console.log("pushing x : ",state.path)
+            })
+            x=x+maxDX
+            x=getRealValue(x)
+        }
+        else if (x == goal[0] && maxDY == 0){
+            let altPath = getAlternativePath(state,x,y,goal);
+            let directionToPath = altPath[0]
+            maxDX = altPath[1]
+
+            maxDX *= directionToPath;
+            [...Array(Math.abs(maxDX)).keys()].map((i) => {
+                state.path.push([getRealValue(x+(i+1)*directionToPath),y]);
+            })
+            x=x+maxDX
+            x=getRealValue(x)
+        }else if (y==goal[1] && maxDX == 0){
+            let altPath = getAlternativePath(state,x,y,goal);
+            let directionToPath = altPath[0] 
+            maxDY = altPath[1] 
+            maxDY *= directionToPath;
+            [...Array(Math.abs(maxDY)).keys()].map((i) => {
+                state.path.push([x,getRealValue(y+(i+1)*directionToPath)]);
+            })
+            y=y+maxDY
+            y=getRealValue(y)
+        }
+        else{
+            maxDY <0 ? directionsOffset = -1 : directionsOffset = 1;
+            [...Array(Math.abs(maxDY)).keys()].map((i) => {
+                state.path.push([x,getRealValue(y+(i+1)*directionsOffset)]);
+                console.log("pushing y : ",state.path)
+
+            })
+            y=y+maxDY
+            y=getRealValue(y)
+        }
+    }
+    console.log(x!=goal[0] && y!=goal[1])
+    console.log("State Path:",state.path)
+    console.log("x : ",x," y : ",y)
+    return state.path
+}
 
 export default function reducer(state = initialState, action) {
 	switch (action.type) {
@@ -115,7 +296,14 @@ export default function reducer(state = initialState, action) {
             return {...state, goal: {...state.goal,coord : action.payload,reached:reachedGoal(state)}};
         }
         case actionType.startAutoSearch: {
+            if(state.goal.coord!=[]){
+                console.log("state path:",pathToGoal(state,state.goal.coord));
+                return {...state
+                    // , path: pathToGoal(state,state.goal.coord)
+                    };
+            }
 			return {...state};
+
         }
 		default: {
 			return {...state};
