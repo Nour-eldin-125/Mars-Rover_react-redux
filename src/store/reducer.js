@@ -12,7 +12,8 @@ const initialState = {
     goal:{
         coord:[],
         reached:false,
-    }
+    },
+    path:[[0,0]]
 };
 const directions = ["NORTH", "EAST", "SOUTH", "WEST"];
 
@@ -60,13 +61,22 @@ function calculateNextStep(state,action){
 }
 
 function checkSafe(state,x,y){
-    if(state.obstacles.some(obs => obs[0] == x && obs[1] == y)){
+    if(checkItemInArray(state.obstacles,[x,y])){
         return false;
     }
     else if (state.safe.valid)
         return true;
     else 
         return false
+}
+
+function checkItemInArray (arr, item) {
+    if (arr.some(i => i[0] == item[0] && i[1] == item[1])){
+        return true
+    }
+    else{
+        return false
+    }
 }
 
 function reachedGoal(state){
@@ -78,6 +88,7 @@ function reachedGoal(state){
     }
 }
 
+
 export default function reducer(state = initialState, action) {
 	switch (action.type) {
 		case actionType.submitData: {
@@ -86,9 +97,13 @@ export default function reducer(state = initialState, action) {
                 if(reachedGoal(newState)){
                     return {...state, goal: {...state.goal,reached:true}};
                 }
-                return {...newState} 
+                let point = [newState.x_value,newState.y_value];
+                if (!checkItemInArray(state.path,point)){
+                    return {...newState,path:[...state.path,point]};
+                }
+                return {...newState};
             }
-			return {...state, safe: {...newState.safe, valid: false, report: "Obstacle in the location: ["+ newState.x_value+","+newState.y_value+"]"+""}};
+			return {...state, safe: {...newState.safe, valid: false, report: "Obstacle in the location: ["+ newState.x_value+","+newState.y_value+"]"}};
 		}
         case actionType.addObstacle: {
             return {...state, obstacles: [...state.obstacles, action.payload]};
@@ -98,6 +113,9 @@ export default function reducer(state = initialState, action) {
         }
         case actionType.addGoal: {
             return {...state, goal: {...state.goal,coord : action.payload,reached:reachedGoal(state)}};
+        }
+        case actionType.startAutoSearch: {
+			return {...state};
         }
 		default: {
 			return {...state};
