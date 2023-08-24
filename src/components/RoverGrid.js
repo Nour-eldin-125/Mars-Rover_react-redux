@@ -13,7 +13,8 @@
             "SOUTH":"rover_bot.png",
             "WEST":"rover_left.png",
             "OBSTACLE":"obstacle.png",
-            "GOAL": "goal.png"
+            "GOAL": "goal.png",
+            "AUTOSEARCH": "rover_ghost.png"
         }
  	}
      componentDidMount() {
@@ -24,6 +25,11 @@
         this.props.obstacles.map(obs => this.createRoverImg(obs[0],obs[1],"Obstacle"))
         if (this.props.goal!=[])
             this.createRoverImg(this.props.goal.coord[0],this.props.goal.coord[1],"Goal")
+        if(this.props.autoSearch){
+            this.props.path.map(path => {
+                this.createRoverImg(path[0],path[1],"AUTOSEARCH")
+            })
+        }
     }
     
     createRoverImg(x,y,img){
@@ -36,7 +42,10 @@
             this.roverLastLocation = number
         }else if (img == "Obstacle"){
             rover.setAttribute("src", this.roverImgfromdirection.OBSTACLE)
-        }else{
+        }else if (img == "AUTOSEARCH"){
+            rover.setAttribute("src", this.roverImgfromdirection.AUTOSEARCH)
+        }
+        else{
             document.getElementById("img_"+this.goalLastLocation)?.setAttribute("src","")
             rover?.setAttribute("src", this.roverImgfromdirection.GOAL)
             this.goalLastLocation = number
@@ -83,7 +92,9 @@ const mapStateToProps = (state) => {
         direction: state.direction,
         obstacles: state.obstacles,
         safe: state.safe,
-        goal: state.goal
+        goal: state.goal,
+        path: state.path,
+        autoSearch: state.autoSearch
     }
 }
 
