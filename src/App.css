@@ -29,3 +29,115 @@ img{
     background-size: cover;
     background-attachment: fixed;
 }
+
+.container{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+input{
+  width: 50%;
+  max-width: 100px;
+  margin:5px;
+}
+label{
+  margin: 5px;
+}
+
+/* CSS */
+.add {
+  align-items: center;
+  background-image: linear-gradient(135deg, #f34079 40%, #fc894d);
+  border: 0;
+  border-radius: 10px;
+  box-sizing: border-box;
+  color: #fff;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  font-family: "Codec cold",sans-serif;
+  font-size: 16px;
+  font-weight: 700;
+  justify-content: center;
+  letter-spacing: .4px;
+  line-height: 1.5;
+  max-width: 100%;
+  outline: none;
+  overflow: hidden;
+  padding: 5px 20px;
+  text-decoration: none;
+  text-transform: uppercase;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+}
+
+.add:active {
+  outline: 0;
+}
+
+.add:hover {
+  outline: 0;
+}
+
+.add span {
+  transition: all 200ms;
+}
+
+.add:hover span {
+  transform: scale(.9);
+  opacity: .75;
+}
+
+/* CSS */
+#searchButton {
+  appearance: none;
+  backface-visibility: hidden;
+  background-color: #27ae60;
+  border-radius: 8px;
+  border-style: none;
+  box-shadow: rgba(39, 174, 96, .15) 0 4px 9px;
+  box-sizing: border-box;
+  color: #fff;
+  cursor: pointer;
+  display: inline-block;
+  font-family: Inter,-apple-system,system-ui,"Segoe UI",Helvetica,Arial,sans-serif;
+  font-size: 16px;
+  font-weight: 600;
+  letter-spacing: normal;
+  line-height: 1.5;
+  outline: none;
+  overflow: hidden;
+  padding: 5px 20px;
+  position: relative;
+  text-align: center;
+  text-decoration: none;
+  transform: translate3d(0, 0, 0);
+  transition: all .3s;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+  vertical-align: top;
+  white-space: nowrap;
+}
+
+#searchButton:hover {
+  background-color: #1e8449;
+  opacity: 1;
+  transform: translateY(0);
+  transition-duration: .35s;
+}
+
+#searchButton:active {
+  transform: translateY(2px);
+  transition-duration: .35s;
+}
+
+#searchButton:hover {
+  box-shadow: rgba(39, 174, 96, .2) 0 6px 12px;
+}
+button{
+  margin:5px;
+}
+
+
