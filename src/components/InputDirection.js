@@ -27,36 +27,42 @@ class InputDirection extends React.Component {
             return
         }
 
+        let obs = inp.value.split(",")
+        if(this.props.obstacles.some(obstacle => obstacle[0] == obs[0] && obstacle[1] == obs[1])){
+            alert("obstacle already exists");
+            return
+        }
         // console.log("INput : ", inp.value.split(","));
         this.props.addGoal(inp.value.split(","));
     }
     
-    search() {
-        this.props.startAutoSearch()
-    }
 
     render() {
         return (
                 <>
-                    <h3>Rover Commands</h3>
-                    <p>Command Rover to location: </p>
+                    <p>Commands</p>
                     <input type="text"  id="inp"/>
-                    <button onClick= {() => {this.checkData()}}>Submit</button>
+                    <button className = "add command" onClick= {() => {this.checkData()}}>Add</button>
                     <br/>
-                    <p>Auto Search for Goal: </p>
+                    <p>Goal</p>
                     <input type="text"  id="goalSearch"/>
-                    <button placeholder="eg. 1,1 " onClick= {() => {this.createGoal()}}>Search</button>
-                    <button onClick= {() => {this.search()}}>GO</button>
+                    <button placeholder="eg. 1,1 " className = "add goal" onClick= {() => {this.createGoal()}}>Add</button>
                 </>
             )
     }
 }
+
+const mapStateToProps = (state) => {
+    return {
+        obstacles: state.obstacles,
+    }
+}
+
 const mapDispatchToProps = (dispatch)=>{
     return {
         submitData: (payload) => dispatch(Submit(payload)),
         addGoal: (payload) => dispatch(addGoal(payload)),
-        startAutoSearch: () => dispatch(startAutoSearch())
     }
 }
 
-export default connect (null, mapDispatchToProps)(InputDirection);
+export default connect (mapStateToProps, mapDispatchToProps)(InputDirection);
