@@ -67,7 +67,7 @@ function calculateNextStep(state, action) {
 }
 
 function checkSafe(state, x, y) {
-	if (checkItemInArray(state.obstacles, [x, y])) {
+	if (checkItemInArray(state.obstacles, [getRealValue(x), getRealValue(y)])) {
 		return false;
 	} else if (state.safe.valid) return true;
 	else return false;
@@ -83,8 +83,8 @@ function checkItemInArray(arr, item) {
 
 function reachedGoal(state) {
 	if (
-		state.goal.coord[0] == state.x_value &&
-		state.goal.coord[1] == state.y_value
+		state.goal.coord[0] == getRealValue(state.x_value) &&
+		state.goal.coord[1] == getRealValue(state.y_value)
 	) {
 		return true;
 	} else {
@@ -274,33 +274,30 @@ export default function reducer(state = initialState, action) {
 			let newState = calculateNextStep(state, action);
 			if (checkSafe(newState, newState.x_value, newState.y_value)) {
 				if (reachedGoal(newState)) {
-					return { ...state, goal: { ...state.goal, reached: true } };
+					return { ...state, goal: { ...state.goal, reached: true ,reset:false } };
 				}
-				// let point = [newState.x_value,newState.y_value];
-				// if (!checkItemInArray(state.path,point)){
-				//     return {...newState,path:[...state.path,point]};
-				// }
-				return { ...newState };
+				return { ...newState,reset:false };
 			}
 			return {
 				...state,
+                reset:false,
 				safe: {
 					...newState.safe,
 					valid: false,
 					report:
 						"Obstacle in the location: [" +
-						newState.x_value +
+						getRealValue(newState.x_value) +
 						"," +
-						newState.y_value +
+						getRealValue(newState.y_value) +
 						"]",
 				},
 			};
 		}
 		case actionType.addObstacle: {
-			return { ...state, obstacles: [...state.obstacles, action.payload] };
+			return { ...state, obstacles: [...state.obstacles, action.payload], reset:false};
 		}
 		case actionType.reset: {
-			return { ...initialState };
+			return { ...initialState,reset:true };
 		}
 		case actionType.addGoal: {
 			return {
@@ -310,6 +307,7 @@ export default function reducer(state = initialState, action) {
 					coord: action.payload,
 					reached: reachedGoal(state),
 				},
+                reset:false
 			};
 		}
 		case actionType.startAutoSearch: {
@@ -326,10 +324,12 @@ export default function reducer(state = initialState, action) {
 					autoSearch: true,
 					x_value: point[0],
 					y_value: point[1],
+                    direction: "EAST",
 					path: [...newState.path, ...newPath],
+                    reset:false
 				};
 			}
-			return { ...state };
+			return { ...state,reset:false};
 		}
 		default: {
 			return { ...state };
