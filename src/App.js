@@ -10,10 +10,14 @@ function App() {
     <>
       <h1>Mars Rover</h1>
       <RoverGrid />
-      <InputDirection />
-      <br/>
-      <Obstacles />
-      <Rover />
+
+          <div className = "container">
+
+            <InputDirection />
+          
+            <Obstacles />
+          </div>
+        <Rover />
     </>
   );
 }
