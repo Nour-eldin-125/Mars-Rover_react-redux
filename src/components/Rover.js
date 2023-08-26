@@ -1,6 +1,7 @@
 import React from "react";
 import { connect } from "react-redux";
 import { Reset } from "../store/actions";
+import { startAutoSearch } from "../store/actions";
 
 class Rover extends React.Component {
 	constructor(props) {
@@ -9,13 +10,21 @@ class Rover extends React.Component {
 	
 	render() {
 		return (
-			<div>
+			
 				<>
+				<div className="container">
+					<button id="searchButton" onClick= {() => {this.props.startAutoSearch()}}>Search</button>
+				</div>
+				<div className="container">
+
 					<p>
                     	the rover position is {"("+this.props.x_value + ", " +
 						 this.props.y_value + ", " + this.props.direction +")"} 
 						<br/>
-						Obstacles : {this.props.obstacles?.map((obs)=>"["+obs+"]")}</p>
+						{this.props.obstacles.length != 0 && <p> Obstacles : {this.props.obstacles?.map((obs)=>"["+obs+"]")}</p>}	
+					</p>
+				</div>
+				<div className="container">
 					{
 						!this.props.safe.valid && 
 							<>
@@ -30,9 +39,10 @@ class Rover extends React.Component {
 								<p>Goal {" ["+this.props.goal.coord+"]"}</p>
 							</>
 					}
+				</div>
+				{/* <button onClick={()=>this.props.reset()}>Reset</button> */}
 				</>
-				<button onClick={()=>this.props.reset()}>Reset</button>
-			</div>
+			
 		);
 	}
 }
@@ -50,7 +60,8 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch)=>{
 	return {
-		reset: () => dispatch(Reset())
+		reset: () => dispatch(Reset()),
+		startAutoSearch: () => dispatch(startAutoSearch())
 	}
 }
 
