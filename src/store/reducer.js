@@ -311,7 +311,7 @@ export default function reducer(state = initialState, action) {
 			};
 		}
 		case actionType.startAutoSearch: {
-			if (state.goal.coord != []) {
+			if (state.goal.coord.length!=0) {
 				let newState = {
 					...state,
 					path: [[getRealValue(state.x_value), getRealValue(state.y_value)]],
