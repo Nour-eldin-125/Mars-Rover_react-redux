@@ -4,18 +4,24 @@ const initialState = {
 	x_value: 0,
 	y_value: 0,
 	direction: "NORTH",
-	obstacles: [],
+	// obstacles: [[2,0],[2,1],[2,2],[2,3],[2,4]],
+	// obstacles: [[2,2],[2,3],[2,4],[3,2],[4,2],[4,4],[3,4]],
+	obstacles: [...Array(8).keys()].map((i) => {return [i, 3]}),
+	// obstacles: [],
 	safe: {
 		valid: true,
 		report: "",
 	},
 	goal: {
+		// coord: [3,2],
+		// coord: [3,3],
 		coord: [],
 		reached: false,
 	},
 	path: [],
 	reset: false,
 	autoSearch: false,
+	stuck: false,
 };
 const directions = ["NORTH", "EAST", "SOUTH", "WEST"];
 
@@ -166,7 +172,7 @@ function weightAlternativePathes(
 	let axis = axisValue;
 	let constantAxis = z;
 	let axisGoal;
-
+	let statusStuck = false;
 	if (axisIdentifier == "x") {
 		axisGoal = goal[1];
 		axisIdentifier = "y";
@@ -178,6 +184,7 @@ function weightAlternativePathes(
 	let directionCounter = 0;
 
 	let maxDis = 0;
+
 	while (maxDis == 0) {
 		pathDirection += 1 * direction;
 		directionCounter++;
@@ -189,56 +196,151 @@ function weightAlternativePathes(
 			axisIdentifier,
 			state
 		);
+		if (directionCounter == 11) {
+			statusStuck = true;
+			directionCounter = 0
+			break;
+		}
 	}
-	return directionCounter;
+	return [directionCounter,statusStuck];
 }
 
 function getAlternativePath(state, x, y, goal) {
 	let xdiff = distanceDiffernece(x, goal[0]);
-	let ydiff = distanceDiffernece(y, goal[1]);
+	// let ydiff = distanceDiffernece(y, goal[1]);
 	// vertical Line
 	if (xdiff == 0) {
 		let left = weightAlternativePathes(x, goal, y, "x", state, -1);
 		let right = weightAlternativePathes(x, goal, y, "x", state, 1);
-		if (left < right) {
-			return [-1, left];
+		
+		if (left[1] && right[1]) {return [0, 0]};
+		if (left [1]){
+			return [1, right[0]];
+		}
+		else if (right[1]){
+			return [-1, left[0]];
+		}
+		if (left[0] == right[0]){
+			return [1, right[0]];
+		}
+		if (left[0] < right[0]) {
+			return [-1, left[0]];
 		} else {
-			return [1, right];
+			return [1, right[0]];
 		}
 	}
 	// horizontal Line
 	else {
 		let bot = weightAlternativePathes(y, goal, x, "y", state, -1);
 		let top = weightAlternativePathes(y, goal, x, "y", state, 1);
-		if (bot < top) {
-			return [-1, bot];
+		
+		if (bot[1] && top[1]) {return [0, 0]};
+		if (bot[1]){
+			return [1, top[0]];
+		}
+		else if (top[1]){
+			return [-1, bot[0]];
+		}
+		if (bot[0] == top[0]){
+			return [1, top[0]];
+		}
+		if (bot[0] < top[0]) {
+			return [-1, bot[0]];
 		} else {
-			return [1, top];
+			return [1, top[0]];
 		}
 	}
 }
+
+function checkCoveredPointInPath(point, path) {
+	if (path.some((i) => i[0] == point[0] && i[1] == point[1])) {
+		return true;
+	} else {
+		return false;
+	}
+}
+
 // 2. choose the path to reach the goal
 function pathToGoal(state, goal) {
 	let x = getRealValue(state.x_value);
 	let y = getRealValue(state.y_value);
 	goal = [getRealValue(goal[0]), getRealValue(goal[1])];
+	let maxDXcheckPoint
+	let maxDYcheckPoint
 
 	while (x != goal[0] || y != goal[1]) {
 		let maxDX = maxDistanceCovered(x, goal[0], y, "x", state);
 		let maxDY = maxDistanceCovered(y, goal[1], x, "y", state);
 		let directionsOffset;
+		
 
-		if (Math.abs(maxDX) > Math.abs(maxDY)) {
+		
+		// if (maxDX==0){	
+		// 	let xPath = checkPath
+		// 	maxDXcheckPoint = checkCoveredPointInPath([getRealValue(x + maxDX), y], checkPath);
+		// }
+		// if (maxDY==0){
+		// 	let yPath = checkPath
+		// 	yPath.pop()
+		// 	maxDYcheckPoint = checkCoveredPointInPath([x,getRealValue(y+maxDY)], yPath);
+		// }
+		// else {
+		
+		// }
+		// True for y 
+		// false for x
+		let maxDis
+
+		if (maxDXcheckPoint && maxDYcheckPoint){
+			return [state , "Stuck"];
+		}
+		else if (maxDXcheckPoint && Math.abs(maxDX) > Math.abs(maxDY)){
+			maxDis = true
+		}
+		else if (maxDYcheckPoint && Math.abs(maxDY) > Math.abs(maxDX)){
+			maxDis = false
+		}
+		else if (Math.abs(maxDX) == Math.abs(maxDY) && Math.abs(maxDX)!=0){
+			let checkXdirection = checkCoveredPointInPath([getRealValue(x + maxDX), y], state.path);
+			let checkYdirection = checkCoveredPointInPath([x,getRealValue(y + maxDY)], state.path);
+			if (checkXdirection){
+				if(checkYdirection){
+					return [state , "Stuck"];
+				}
+				else{
+					maxDis = true
+				}
+			}
+			else {
+				maxDis = false
+			}
+		}
+		else {
+			Math.abs(maxDX) > Math.abs(maxDY) ? (maxDis = false) : (maxDis = true);
+		}
+		if (!maxDis) {
 			maxDX < 0 ? (directionsOffset = -1) : (directionsOffset = 1);
+			
+			maxDXcheckPoint = checkCoveredPointInPath([getRealValue(x + maxDX), y], state.path);
+			maxDYcheckPoint = false;
+			
 			[...Array(Math.abs(maxDX)).keys()].map((i) => {
 				state.path.push([getRealValue(x + (i + 1) * directionsOffset), y]);
 			});
 			x = x + maxDX;
 			x = getRealValue(x);
+			state.x_value = x;
 		} else if (x == goal[0] && maxDY == 0) {
+
 			let altPath = getAlternativePath(state, x, y, goal);
+
+			if (altPath[1] == 0 && altPath[0] == 0) {return [state , "Stuck"];}
+			
 			let directionToPath = altPath[0];
 			maxDX = altPath[1];
+
+			maxDXcheckPoint = checkCoveredPointInPath([getRealValue(x + maxDX), y], state.path);
+			maxDYcheckPoint = false
 
 			maxDX *= directionToPath;
 			[...Array(Math.abs(maxDX)).keys()].map((i) => {
@@ -246,8 +348,17 @@ function pathToGoal(state, goal) {
 			});
 			x = x + maxDX;
 			x = getRealValue(x);
+			state.x_value = x;
+
 		} else if (y == goal[1] && maxDX == 0) {
+			
 			let altPath = getAlternativePath(state, x, y, goal);
+
+			maxDYcheckPoint = checkCoveredPointInPath([x,getRealValue(y + maxDY)], state.path);
+			maxDXcheckPoint = false
+
+			if (altPath[1] == 0 && altPath[0] == 0) {return [state , "Stuck"];}
+
 			let directionToPath = altPath[0];
 			maxDY = altPath[1];
 			maxDY *= directionToPath;
@@ -256,16 +367,27 @@ function pathToGoal(state, goal) {
 			});
 			y = y + maxDY;
 			y = getRealValue(y);
-		} else {
+			state.y_value = y;
+		} else if (maxDXcheckPoint && maxDYcheckPoint) {
+			return [state , "Stuck"];
+		}
+		else {
 			maxDY < 0 ? (directionsOffset = -1) : (directionsOffset = 1);
+
+			maxDYcheckPoint = checkCoveredPointInPath([x,getRealValue(y + maxDY)], state.path);
+			maxDXcheckPoint = false;
+
+
 			[...Array(Math.abs(maxDY)).keys()].map((i) => {
 				state.path.push([x, getRealValue(y + (i + 1) * directionsOffset)]);
 			});
 			y = y + maxDY;
 			y = getRealValue(y);
+			state.y_value = y;
 		}
+
 	}
-	return state.path;
+	return [state, "Success"];
 }
 
 export default function reducer(state = initialState, action) {
@@ -311,22 +433,29 @@ export default function reducer(state = initialState, action) {
 			};
 		}
 		case actionType.startAutoSearch: {
-			if (state.goal.coord.length!=0) {
-				let newState = {
-					...state,
-					path: [[getRealValue(state.x_value), getRealValue(state.y_value)]],
-				};
-				let newPath = pathToGoal(state, state.goal.coord);
-				newPath.pop();
-				let point = newPath.pop();
+			if (state.goal.coord.length!=0 && !state.stuck) {
+				let x = getRealValue(state.x_value)
+				let y = getRealValue(state.y_value)
+				let [newState , status] = pathToGoal(state, state.goal.coord);
+				if (status === "Stuck")
+					{
+						newState.path.pop();
+						let point = newState.path.pop();
+						return { ...newState, x_value: point[0], y_value: point[1], stuck: true ,autoSearch: true,path: [[x,y],...newState.path],};
+					}
+				
+					newState.path.pop();
+					let point = newState.path.pop();
 				return {
 					...newState,
 					autoSearch: true,
 					x_value: point[0],
 					y_value: point[1],
                     direction: "EAST",
-					path: [...newState.path, ...newPath],
-                    reset:false
+					path: [[x,y],...newState.path],
+                    reset:false,
+					goal:{...newState.goal,reached: true},
+					stuck:false
 				};
 			}
 			return { ...state,reset:false};
