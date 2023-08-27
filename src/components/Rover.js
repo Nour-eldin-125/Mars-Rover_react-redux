@@ -35,8 +35,14 @@ class Rover extends React.Component {
 						this.props.goal.reached && 
 							<>
 								<h3 style={{"color":"Green"}}>Rover Reached Goal</h3>
-								<p>Goal {" ["+this.props.goal.coord+"]"}</p>
+								<p>{" ["+this.props.goal.coord+"]"}</p>
 							</>
+					}
+					{
+						this.props.stuck &&
+						<>
+								<h3 style={{"color":"red"}}>Rover is Stuck</h3>
+						</>
 					}
 				</div>
 				{/* <button onClick={()=>this.props.reset()}>Reset</button> */}
@@ -53,7 +59,8 @@ const mapStateToProps = (state) => {
 		direction: state.direction,
 		obstacles: state.obstacles,
 		safe: state.safe,
-		goal: state.goal
+		goal: state.goal,
+		stuck: state.stuck,
 	}
 }
 
