@@ -6,8 +6,8 @@ const initialState = {
 	direction: "NORTH",
 	// obstacles: [[2,0],[2,1],[2,2],[2,3],[2,4]],
 	// obstacles: [[2,2],[2,3],[2,4],[3,2],[4,2],[4,4],[3,4]],
-	obstacles: [...Array(8).keys()].map((i) => {return [i, 3]}),
-	// obstacles: [],
+	// obstacles: [...Array(8).keys()].map((i) => {return [i, 3]}),
+	obstacles: [],
 	safe: {
 		valid: true,
 		report: "",
