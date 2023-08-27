@@ -43,7 +43,6 @@ class InputDirection extends React.Component {
                     <p>Commands</p>
                     <input type="text"  id="inp"/>
                     <button className = "add command" onClick= {() => {this.checkData()}}>Add</button>
-                    <br/>
                     <p>Goal</p>
                     <input type="text"  id="goalSearch"/>
                     <button placeholder="eg. 1,1 " className = "add goal" onClick= {() => {this.createGoal()}}>Add</button>

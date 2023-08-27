@@ -140,4 +140,9 @@ button{
   margin:5px;
 }
 
-
+@media (max-width: 720px) {
+  .container {
+    display: flex;
+    flex-direction: column;
+  }
+}

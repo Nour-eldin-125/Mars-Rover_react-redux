@@ -20,7 +20,6 @@ class Rover extends React.Component {
 					<p>
                     	the rover position is {"("+this.props.x_value + ", " +
 						 this.props.y_value + ", " + this.props.direction +")"} 
-						<br/>
 						{this.props.obstacles.length != 0 && <p> Obstacles : {this.props.obstacles?.map((obs)=>"["+obs+"]")}</p>}	
 					</p>
 				</div>

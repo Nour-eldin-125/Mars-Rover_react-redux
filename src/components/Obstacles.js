@@ -24,7 +24,7 @@ class Obstacles extends React.Component {
     render() {
         return (
             <>
-                <label>Obstacles</label>
+                <p>Obstacles</p>
                 <input type="text"  id="inp_obstacle"/>                
                 <button className = "add obstacle" onClick= {() => {this.addObs()}}>ADD</button>
             </>
