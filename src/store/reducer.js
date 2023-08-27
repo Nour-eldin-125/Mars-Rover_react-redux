@@ -198,11 +198,11 @@ function weightAlternativePathes(
 		);
 		if (directionCounter == 11) {
 			statusStuck = true;
-			directionCounter = 0
+			directionCounter = 0;
 			break;
 		}
 	}
-	return [directionCounter,statusStuck];
+	return [directionCounter, statusStuck];
 }
 
 function getAlternativePath(state, x, y, goal) {
@@ -212,15 +212,16 @@ function getAlternativePath(state, x, y, goal) {
 	if (xdiff == 0) {
 		let left = weightAlternativePathes(x, goal, y, "x", state, -1);
 		let right = weightAlternativePathes(x, goal, y, "x", state, 1);
-		
-		if (left[1] && right[1]) {return [0, 0]};
-		if (left [1]){
-			return [1, right[0]];
+
+		if (left[1] && right[1]) {
+			return [0, 0];
 		}
-		else if (right[1]){
+		if (left[1]) {
+			return [1, right[0]];
+		} else if (right[1]) {
 			return [-1, left[0]];
 		}
-		if (left[0] == right[0]){
+		if (left[0] == right[0]) {
 			return [1, right[0]];
 		}
 		if (left[0] < right[0]) {
@@ -233,15 +234,16 @@ function getAlternativePath(state, x, y, goal) {
 	else {
 		let bot = weightAlternativePathes(y, goal, x, "y", state, -1);
 		let top = weightAlternativePathes(y, goal, x, "y", state, 1);
-		
-		if (bot[1] && top[1]) {return [0, 0]};
-		if (bot[1]){
-			return [1, top[0]];
+
+		if (bot[1] && top[1]) {
+			return [0, 0];
 		}
-		else if (top[1]){
+		if (bot[1]) {
+			return [1, top[0]];
+		} else if (top[1]) {
 			return [-1, bot[0]];
 		}
-		if (bot[0] == top[0]){
+		if (bot[0] == top[0]) {
 			return [1, top[0]];
 		}
 		if (bot[0] < top[0]) {
@@ -265,17 +267,15 @@ function pathToGoal(state, goal) {
 	let x = getRealValue(state.x_value);
 	let y = getRealValue(state.y_value);
 	goal = [getRealValue(goal[0]), getRealValue(goal[1])];
-	let maxDXcheckPoint
-	let maxDYcheckPoint
+	let maxDXcheckPoint;
+	let maxDYcheckPoint;
 
 	while (x != goal[0] || y != goal[1]) {
 		let maxDX = maxDistanceCovered(x, goal[0], y, "x", state);
 		let maxDY = maxDistanceCovered(y, goal[1], x, "y", state);
 		let directionsOffset;
-		
 
-		
-		// if (maxDX==0){	
+		// if (maxDX==0){
 		// 	let xPath = checkPath
 		// 	maxDXcheckPoint = checkCoveredPointInPath([getRealValue(x + maxDX), y], checkPath);
 		// }
@@ -285,45 +285,48 @@ function pathToGoal(state, goal) {
 		// 	maxDYcheckPoint = checkCoveredPointInPath([x,getRealValue(y+maxDY)], yPath);
 		// }
 		// else {
-		
-		// }
-		// True for y 
-		// false for x
-		let maxDis
 
-		if (maxDXcheckPoint && maxDYcheckPoint){
-			return [state , "Stuck"];
-		}
-		else if (maxDXcheckPoint && Math.abs(maxDX) > Math.abs(maxDY)){
-			maxDis = true
-		}
-		else if (maxDYcheckPoint && Math.abs(maxDY) > Math.abs(maxDX)){
-			maxDis = false
-		}
-		else if (Math.abs(maxDX) == Math.abs(maxDY) && Math.abs(maxDX)!=0){
-			let checkXdirection = checkCoveredPointInPath([getRealValue(x + maxDX), y], state.path);
-			let checkYdirection = checkCoveredPointInPath([x,getRealValue(y + maxDY)], state.path);
-			if (checkXdirection){
-				if(checkYdirection){
-					return [state , "Stuck"];
+		// }
+		// True for y
+		// false for x
+		let maxDis;
+
+		if (maxDXcheckPoint && maxDYcheckPoint) {
+			return [state, "Stuck"];
+		} else if (maxDXcheckPoint && Math.abs(maxDX) > Math.abs(maxDY)) {
+			maxDis = true;
+		} else if (maxDYcheckPoint && Math.abs(maxDY) > Math.abs(maxDX)) {
+			maxDis = false;
+		} else if (Math.abs(maxDX) == Math.abs(maxDY) && Math.abs(maxDX) != 0) {
+			let checkXdirection = checkCoveredPointInPath(
+				[getRealValue(x + maxDX), y],
+				state.path
+			);
+			let checkYdirection = checkCoveredPointInPath(
+				[x, getRealValue(y + maxDY)],
+				state.path
+			);
+			if (checkXdirection) {
+				if (checkYdirection) {
+					return [state, "Stuck"];
+				} else {
+					maxDis = true;
 				}
-				else{
-					maxDis = true
-				}
+			} else {
+				maxDis = false;
 			}
-			else {
-				maxDis = false
-			}
-		}
-		else {
+		} else {
 			Math.abs(maxDX) > Math.abs(maxDY) ? (maxDis = false) : (maxDis = true);
 		}
 		if (!maxDis) {
 			maxDX < 0 ? (directionsOffset = -1) : (directionsOffset = 1);
-			
-			maxDXcheckPoint = checkCoveredPointInPath([getRealValue(x + maxDX), y], state.path);
+
+			maxDXcheckPoint = checkCoveredPointInPath(
+				[getRealValue(x + maxDX), y],
+				state.path
+			);
 			maxDYcheckPoint = false;
-			
+
 			[...Array(Math.abs(maxDX)).keys()].map((i) => {
 				state.path.push([getRealValue(x + (i + 1) * directionsOffset), y]);
 			});
@@ -331,16 +334,20 @@ function pathToGoal(state, goal) {
 			x = getRealValue(x);
 			state.x_value = x;
 		} else if (x == goal[0] && maxDY == 0) {
-
 			let altPath = getAlternativePath(state, x, y, goal);
 
-			if (altPath[1] == 0 && altPath[0] == 0) {return [state , "Stuck"];}
-			
+			if (altPath[1] == 0 && altPath[0] == 0) {
+				return [state, "Stuck"];
+			}
+
 			let directionToPath = altPath[0];
 			maxDX = altPath[1];
 
-			maxDXcheckPoint = checkCoveredPointInPath([getRealValue(x + maxDX), y], state.path);
-			maxDYcheckPoint = false
+			maxDXcheckPoint = checkCoveredPointInPath(
+				[getRealValue(x + maxDX), y],
+				state.path
+			);
+			maxDYcheckPoint = false;
 
 			maxDX *= directionToPath;
 			[...Array(Math.abs(maxDX)).keys()].map((i) => {
@@ -349,15 +356,18 @@ function pathToGoal(state, goal) {
 			x = x + maxDX;
 			x = getRealValue(x);
 			state.x_value = x;
-
 		} else if (y == goal[1] && maxDX == 0) {
-			
 			let altPath = getAlternativePath(state, x, y, goal);
 
-			maxDYcheckPoint = checkCoveredPointInPath([x,getRealValue(y + maxDY)], state.path);
-			maxDXcheckPoint = false
+			maxDYcheckPoint = checkCoveredPointInPath(
+				[x, getRealValue(y + maxDY)],
+				state.path
+			);
+			maxDXcheckPoint = false;
 
-			if (altPath[1] == 0 && altPath[0] == 0) {return [state , "Stuck"];}
+			if (altPath[1] == 0 && altPath[0] == 0) {
+				return [state, "Stuck"];
+			}
 
 			let directionToPath = altPath[0];
 			maxDY = altPath[1];
@@ -369,14 +379,15 @@ function pathToGoal(state, goal) {
 			y = getRealValue(y);
 			state.y_value = y;
 		} else if (maxDXcheckPoint && maxDYcheckPoint) {
-			return [state , "Stuck"];
-		}
-		else {
+			return [state, "Stuck"];
+		} else {
 			maxDY < 0 ? (directionsOffset = -1) : (directionsOffset = 1);
 
-			maxDYcheckPoint = checkCoveredPointInPath([x,getRealValue(y + maxDY)], state.path);
+			maxDYcheckPoint = checkCoveredPointInPath(
+				[x, getRealValue(y + maxDY)],
+				state.path
+			);
 			maxDXcheckPoint = false;
-
 
 			[...Array(Math.abs(maxDY)).keys()].map((i) => {
 				state.path.push([x, getRealValue(y + (i + 1) * directionsOffset)]);
@@ -385,7 +396,6 @@ function pathToGoal(state, goal) {
 			y = getRealValue(y);
 			state.y_value = y;
 		}
-
 	}
 	return [state, "Success"];
 }
@@ -396,13 +406,16 @@ export default function reducer(state = initialState, action) {
 			let newState = calculateNextStep(state, action);
 			if (checkSafe(newState, newState.x_value, newState.y_value)) {
 				if (reachedGoal(newState)) {
-					return { ...state, goal: { ...state.goal, reached: true ,reset:false } };
+					return {
+						...state,
+						goal: { ...state.goal, reached: true, reset: false },
+					};
 				}
-				return { ...newState,reset:false };
+				return { ...newState, reset: false };
 			}
 			return {
 				...state,
-                reset:false,
+				reset: false,
 				safe: {
 					...newState.safe,
 					valid: false,
@@ -416,10 +429,14 @@ export default function reducer(state = initialState, action) {
 			};
 		}
 		case actionType.addObstacle: {
-			return { ...state, obstacles: [...state.obstacles, action.payload], reset:false};
+			return {
+				...state,
+				obstacles: [...state.obstacles, action.payload],
+				reset: false,
+			};
 		}
 		case actionType.reset: {
-			return { ...initialState,reset:true };
+			return { ...initialState, reset: true };
 		}
 		case actionType.addGoal: {
 			return {
@@ -429,39 +446,57 @@ export default function reducer(state = initialState, action) {
 					coord: action.payload,
 					reached: reachedGoal(state),
 				},
-                reset:false
+				reset: false,
 			};
 		}
 		case actionType.startAutoSearch: {
-			if (state.goal.coord.length!=0 && !state.stuck) {
-				let x = getRealValue(state.x_value)
-				let y = getRealValue(state.y_value)
-				let [newState , status] = pathToGoal(state, state.goal.coord);
-				if (status === "Stuck")
-					{
-						newState.path.pop();
-						let point = newState.path.pop();
-						return { ...newState, x_value: point[0], y_value: point[1], stuck: true ,autoSearch: true,path: [[x,y],...newState.path],};
-					}
-				
+			if (state.goal.coord.length != 0 && !state.stuck) {
+				let x = getRealValue(state.x_value);
+				let y = getRealValue(state.y_value);
+				let [newState, status] = pathToGoal(state, state.goal.coord);
+				if (status === "Stuck") {
 					newState.path.pop();
 					let point = newState.path.pop();
+					return {
+						...newState,
+						x_value: point[0],
+						y_value: point[1],
+						stuck: true,
+						autoSearch: true,
+						path: [[x, y], ...newState.path],
+					};
+				}
+
+				newState.path.pop();
+				let point = newState.path.pop();
 				return {
 					...newState,
 					autoSearch: true,
 					x_value: point[0],
 					y_value: point[1],
-                    direction: "EAST",
-					path: [[x,y],...newState.path],
-                    reset:false,
-					goal:{...newState.goal,reached: true},
-					stuck:false
+					direction: "EAST",
+					path: [[x, y], ...newState.path],
+					reset: false,
+					goal: { ...newState.goal, reached: true },
+					stuck: false,
 				};
 			}
-			return { ...state,reset:false};
+			return { ...state, reset: false };
 		}
 		default: {
 			return { ...state };
 		}
 	}
 }
+
+export {
+	getRealValue,
+	getAlternativePath,
+	checkSafe,
+	reachedGoal,
+	calculateNextStep,
+	pathToGoal,
+	checkItemInArray,
+	distanceDiffernece,
+	checkCoveredPointInPath
+};
