@@ -32,6 +32,10 @@ class InputDirection extends React.Component {
             alert("obstacle already exists");
             return
         }
+        if (this.props.x_value == obs[0] && this.props.y_value == obs[1]) {
+            alert("Cannot add goal on the Rover");
+            return
+        }
         // console.log("INput : ", inp.value.split(","));
         this.props.addGoal(inp.value.split(","));
     }
@@ -54,6 +58,8 @@ class InputDirection extends React.Component {
 const mapStateToProps = (state) => {
     return {
         obstacles: state.obstacles,
+        x_value:state.x_value,
+        y_value:state.y_value
     }
 }
 
