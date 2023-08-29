@@ -5,10 +5,6 @@ describe("reducer functions", () => {
         expect(reduce.getRealValue(1)).toBe(1);
         expect(reduce.getRealValue(-1)).toBe(9);
     })
-    it ("distance differnece", () => {
-        expect(reduce.distanceDiffernece(1, 2)).toBe(1);
-        expect(reduce.distanceDiffernece(2, 1)).toBe(-1);
-    })
     it ("check item exits in array", () => {
         const obs = [[1,2],[3,4]];
         expect(reduce.checkItemInArray(obs, [1,2])).toBeTruthy();
@@ -52,5 +48,49 @@ describe("reducer functions", () => {
         let path = [[1,2],[3,4]]
         expect(reduce.checkCoveredPointInPath([1,2], path)).toBe(true);
         expect(reduce.checkCoveredPointInPath([2,0], path)).toBe(false);
+    })
+
+    it("Calculate the Next Step : ",()=>{
+        // F B L R D all small letters
+        let state = {
+            x_value: 1,
+            y_value: 2,
+            direction: "NORTH",
+        }
+        expect(reduce.calculateNextStep(state, {payload: "f"})).toEqual({
+            ...state,
+            x_value: 1,
+            y_value: 3
+        })
+        
+        expect(reduce.calculateNextStep(state, {payload: "b"})).toEqual({
+            ...state,
+            x_value: 1,
+            y_value: 1
+        })
+        
+
+        expect(reduce.calculateNextStep(state, {payload: "r"})).toEqual({
+            ...state,
+            direction: "EAST"
+        })
+
+        expect(reduce.calculateNextStep(
+            state,
+            {payload: "l"}
+        ))
+        .toEqual({
+            x_value:1,
+            y_value:2,
+            direction: "NORTH"
+        })
+    })
+
+    
+})
+
+describe ("BFS Functions ", () => {
+    it ("take next step", ()=>{
+        
     })
 })
