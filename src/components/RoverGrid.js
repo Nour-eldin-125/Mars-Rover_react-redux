@@ -24,41 +24,41 @@
         }
  	}
      componentDidMount() {
-         this.createRoverImg(this.props.x_value,this.props.y_value,"Rover")
-         this.setState({
-            obstacles:this.props.obstacles,
-            goal:this.props.goal,
-            path:this.props.path
-        })
-        }
+            this.createRoverImg(this.props.x,this.props.y,"Rover")
+        //     this.setState({
+        //     obstacles:this.props.obstacles,
+        //     goal:this.props.goal,
+        //     path:this.props.path
+        // })
+    }
 
     componentDidUpdate(prevProps) {
-        if (prevProps != this.props){
-             if (this.props.reset){
-                this.state.obstacles.map(obs => {
-                    this.removeImage((obs[0]),(obs[1]))
-                })
-                this.state.path.map(path => {
-                    this.removeImage(path[0],path[1])
-                })
-                this.removeImage(this.state.goal[0],this.state.goal[1])
-            }
-            this.createRoverImg(this.props.x_value,this.props.y_value,"Rover")
-            this.props.obstacles.map(obs => this.createRoverImg(obs[0],obs[1],"Obstacle"))
-            if (this.props.goal!=[])
-                this.createRoverImg(this.props.goal.coord[0],this.props.goal.coord[1],"Goal")
-            if(this.props.autoSearch){
-                this.props.path.map(path => {
-                    this.createRoverImg(path[0],path[1],"AUTOSEARCH")
-                })
-            }
+        // if (prevProps != this.props){
+        //      if (this.props.reset){
+        //         this.state.obstacles.map(obs => {
+        //             this.removeImage((obs[0]),(obs[1]))
+        //         })
+        //         this.state.path.map(path => {
+        //             this.removeImage(path[0],path[1])
+        //         })
+        //         this.removeImage(this.state.goal[0],this.state.goal[1])
+        //     }
+            this.createRoverImg(this.props.x,this.props.y,"Rover")
+        //     this.props.obstacles.map(obs => this.createRoverImg(obs[0],obs[1],"Obstacle"))
+        //     if (this.props.goal!=[])
+        //         this.createRoverImg(this.props.goal.coord[0],this.props.goal.coord[1],"Goal")
+        //     if(this.props.autoSearch){
+        //         this.props.path.map(path => {
+        //             this.createRoverImg(path[0],path[1],"AUTOSEARCH")
+        //         })
+        //     }
            
-            this.setState({
-                obstacles:this.props.obstacles,
-                goal:this.props.goal,
-                path:this.props.path
-            })
-        }
+        //     this.setState({
+        //         obstacles:this.props.obstacles,
+        //         goal:this.props.goal,
+        //         path:this.props.path
+        //     })
+        // }
     }
     removeImage(x,y){
         let number = this.getNumberOfRovers(x,y);
@@ -119,15 +119,16 @@
 }
 const mapStateToProps = (state) => {
     return {
-        x_value: state.x_value,
-        y_value: state.y_value,
-        direction: state.direction,
-        obstacles: state.obstacles,
-        safe: state.safe,
-        goal: state.goal,
-        path: state.path,
-        autoSearch: state.autoSearch,
-        reset: state.reset
+        rover: state.rover,
+        x: state.rover.location.x,
+        y: state.rover.location.y,
+        direction: state.rover.location.direction,
+        // obstacles: state.obstacles,
+        // safe: state.safe,
+        // goal: state.goal,
+        // path: state.path,
+        // autoSearch: state.autoSearch,
+        // reset: state.reset
     }
 }
 
