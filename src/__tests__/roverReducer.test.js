@@ -54,6 +54,53 @@ describe ("Testing Class Rover in the rover.reducer", () => {
         expect(rover['location']['y']).toEqual(0)
     })
 
+    it ('check that the obstacles are added to the gird', () => {
+        let rover = reduce.roverReducer
+        rover.addObstacle(1,2)
+        rover.addObstacle(4,1)
+        rover.addObstacle(8,2)
+
+        expect(rover['obstacles'].length).toEqual(3)
+        expect(rover.obstacles[0]).toEqual([1,2])
+    })
+
+    it ('check that only one goal is added to the gird', () => {
+        let rover = reduce.roverReducer
+        rover.addGoal(2,2)
+        rover.addGoal(0,1)
+        rover.addGoal(3,2)
+
+        expect(rover['goal'].coord).toEqual([3,2])
+        expect(rover['goal'].coord).not.toEqual([0,1])
+    })
+
+    it ('check that there is no duplicate obstacles coordinates', () => {
+        let rover = reduce.roverReducer
+        // Added before so there are 3 obatacles didnot increase from before
+        rover.addObstacle(1,2)
+        rover.addObstacle(4,1)
+        rover.addObstacle(8,2)
+
+        expect(rover['obstacles'].length).toEqual(3)
+    })
+
+    it('check that the rover stops before stepping into an obstacle', () => {
+        // there is an obstacle in location [0,1]
+        let rover = reduce.roverReducer
+        rover.addObstacle(0,1)
+        rover.f()
+        expect(rover['location']).toEqual({x:0, y:0, direction:"NORTH"})
+    })
+
+    it('check that the rover stops before Goal is reached', () => {
+        // there is an obstacle in location [0,1]
+        let rover = reduce.roverReducer
+        rover.addGoal(1,0)
+        rover.r()
+        rover.f()
+        expect(rover['location']).toEqual({x:0, y:0, direction:"EAST"})
+    })
+    
 
 })
 
