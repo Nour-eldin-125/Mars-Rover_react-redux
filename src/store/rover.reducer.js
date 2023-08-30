@@ -32,11 +32,12 @@ class Rover {
             let point = this.commands[this.location.direction];
             let x = this.location.x
             let y = this.location.y
+
             x += point[0];
             y += point[1];
-            
-            this.location.x = getRealValue(x);
-            this.location.y = getRealValue(y);
+
+            this.updateRover(x,y)
+           
         };
 
         b = function () {
@@ -47,8 +48,7 @@ class Rover {
             x += (point[0] * -1);
             y += (point[1] * -1);
 
-            this.location.x = getRealValue(x);
-            this.location.y = getRealValue(y);
+            this.updateRover(x,y)
         };
 
         l = function () {
@@ -61,6 +61,28 @@ class Rover {
             this.location.direction = directions[(index + 1) % 4];
         };
 
+        updateRover = function(x,y){
+            let safe = !checkItemInArray(this.obstacles, [x, y]);
+            let reachedGoal = (x == this.goal.coord[0] && y == this.goal.coord[1]);
+            if (safe && !reachedGoal) {
+                this.location.x = getRealValue(x);
+                this.location.y = getRealValue(y);
+            }
+            safe ? this.nextStep.safe = true : this.nextStep.safe = false
+            reachedGoal ? this.nextStep.reached = true : this.nextStep.reached = false
+        }
+
+        addObstacle = function(x,y){
+            let exists = checkItemInArray(this.obstacles, [x, y]);
+            if (!exists && !(x==this.location.x && y==this.location.y))
+                this.obstacles.push([x,y]);
+        }
+
+        addGoal = function(x,y){
+            let exists = checkItemInArray(this.obstacles, [x, y]);
+            if (!exists && (x!=this.location.x || y!=this.location.y))
+                this.goal.coord = [x,y];
+        }
 }
 
 const initialState = {
@@ -74,6 +96,13 @@ function getRealValue(axis) {
 	return axis;
 }
 
+function checkItemInArray(arr, item) {
+	if (arr.some((i) => i[0] == item[0] && i[1] == item[1])) {
+		return true;
+	} else {
+		return false;
+	}
+}
 
 
 export default function reducer(state = initialState, action) {
