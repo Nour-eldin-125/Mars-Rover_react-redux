@@ -14,8 +14,7 @@ class Obstacles extends React.Component {
             return
         }
         let obs = inp.value.split(",")
-        if((this.props.obstacles.some(obstacle => obstacle[0] == obs[0] && obstacle[1] == obs[1])) ||
-         (obs[0]==this.props.x_value && obs[1]==this.props.y_value)){
+        if((this.props.obstacles.some(obstacle => {return (obstacle[0] == obs[0] && obstacle[1] == obs[1])}))){
             alert("obstacle already exists");
             return
         }
@@ -36,8 +35,8 @@ class Obstacles extends React.Component {
 const mapStateToProps = (state) => {
     return {
         obstacles: state.obstacles,
-        x_value: state.x_value,
-        y_value: state.y_value
+		x: state.location.x,
+		y: state.location.y,
     }
 }
 
