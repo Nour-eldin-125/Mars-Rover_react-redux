@@ -58,8 +58,7 @@ class InputDirection extends React.Component {
 const mapStateToProps = (state) => {
     return {
         obstacles: state.obstacles,
-        x_value:state.x_value,
-        y_value:state.y_value
+        location: state.location,
     }
 }
 
