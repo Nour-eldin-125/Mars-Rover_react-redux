@@ -218,5 +218,30 @@ describe ("Testing Class Rover in the rover.reducer", () => {
 
     })
 
+    it ("check if the rover can reach the goal on a maze like obstacles shape", () => {
+        let rover = reduce.roverReducer
+        rover.reset()
+        let obstacles = [
+            [0,3],[1,3],[2,3],[3,3],
+            [1,1],[2,1],[3,1],[3,2],
+            [1,9],[1,8],[1,7],
+            [2,8],[3,8],[4,8],
+            [1,5],[2,5],[3,5],[5,5],[4,5],
+            [5,5],[5,4],[5,3],[5,2],[5,1],[5,0],
+            [6,0],[7,0],[8,0],[9,0],
+            [6,7],[6,8],[6,9],
+            [7,7],[8,7],[8,8],
+            [7,5],[7,4],[7,3],
+            [8,5],[8,3],[8,2],
+            [9,5],[0,9]
+        ];
+        obstacles.forEach((obstacle) => rover.addObstacle(obstacle[0], obstacle[1]))
+        rover.addGoal(7,8)
+        rover.autoSearch()
+        expect(rover['goal']['reached']).toEqual(true)
+        expect(rover.location.x).toEqual(7)
+        expect(rover.location.y).toEqual(9)
+    })
+
 })
 
