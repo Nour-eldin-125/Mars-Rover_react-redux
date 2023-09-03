@@ -19,7 +19,7 @@ class Rover {
         //     [7,7],[8,7],[8,8],
         //     [7,5],[7,4],[7,3],
         //     [8,5],[8,3],[8,2],
-        //     [9,5],[0,9]
+        //     [9,5]
         // ];
 		this.obstacles = [];
 		this.location = {
@@ -174,8 +174,6 @@ class Rover {
 			return;
 		}
 		this.calculateHueristics();
-        let oldRoverPositionX = this.location.x;
-        let oldRoverPositionY = this.location.y;
 		let x = this.location.x;
 		let y = this.location.y;
 		this.saveToPath();
@@ -234,7 +232,7 @@ class Rover {
                 this.path.push([x,y])
                 x = point[0];
                 y = point[1];
-                // this.path.push([x,y])
+                this.path.push([x,y])
                 // this.path.pop()
                 // this.path.push(point)
                 nextDirection = [
