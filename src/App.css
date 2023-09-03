@@ -89,6 +89,12 @@ label{
   opacity: .75;
 }
 
+.stuck{
+  color: red;
+  font-weight: bold;
+  font-size: 20px;
+}
+
 /* CSS */
 #searchButton {
   appearance: none;
