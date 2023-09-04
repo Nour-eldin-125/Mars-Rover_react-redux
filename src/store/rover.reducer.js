@@ -1,4 +1,6 @@
 import { actionType } from "./actions";
+import { gridSize } from "../constants";
+
 
 class Rover {
 	constructor() {
@@ -46,9 +48,9 @@ class Rover {
 			safe: true,
 		};
 		this.stuck = false;
-		this.hueristic = [...Array(10).keys()].map((i) => {
-			return [...Array(10).keys()].map((j) => {
-				return 100;
+		this.hueristic = [...Array(gridSize).keys()].map((i) => {
+			return [...Array(gridSize).keys()].map((j) => {
+				return 10000;
 			});
 		});
 	};
@@ -153,12 +155,12 @@ class Rover {
 		let y = 0;
 		let hueVaule;
 		let safe;
-		while (x != 10) {
-			while (y != 10) {
+		while (x != gridSize) {
+			while (y != gridSize) {
 				hueVaule =
 					Math.abs(this.goal.coord[0] - x) + Math.abs(this.goal.coord[1] - y);
 				safe = !checkItemInArray(this.obstacles, [x, y]);
-				safe ? (this.hueristic[x][y] = hueVaule) : (this.hueristic[x][y] = 100);
+				safe ? (this.hueristic[x][y] = hueVaule) : (this.hueristic[x][y] = 10000);
 				y++;
 			}
 			y = 0;
@@ -198,7 +200,7 @@ class Rover {
             checkPointDuplicated = checkItemInArray(
                 this.path,
                 nextDirection[counter])
-            checkPointDuplicated ? (min = 100) : (min = this.hueristic[nextDirection[counter][0]][nextDirection[counter][1]]);
+            checkPointDuplicated ? (min = 10000) : (min = this.hueristic[nextDirection[counter][0]][nextDirection[counter][1]]);
 			counter++;
 			while (counter < 4) {
 				checkPointDuplicated = checkItemInArray(
@@ -221,11 +223,11 @@ class Rover {
 				counter++;
 			}
 
-			if (min == 100 && this.path.length == 1) {
+			if (min == 10000 && this.path.length == 1) {
 				this.stuck = true;
 				break;
 			}
-            else if (min == 100) {
+            else if (min == 10000) {
                 
                 this.path.pop();
                 point = this.path.pop();
@@ -284,8 +286,8 @@ const initialState = {
 const directions = ["NORTH", "EAST", "SOUTH", "WEST"];
 
 function getRealValue(axis) {
-	while (axis < 0) axis += 10;
-	axis %= 10;
+	while (axis < 0) axis += gridSize;
+	axis %= gridSize;
 	return axis;
 }
 
