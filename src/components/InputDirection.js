@@ -23,10 +23,8 @@ class InputDirection extends React.Component {
         return (
                 <>
                     <p>Commands</p>
-                    <input type="text"  id="inp"/>
-                    <button className = "add command"
-                    onKeyDown={(e) => {e.key === "Enter" && this.checkData()}} 
-                    onClick= {() => {this.checkData()}}>Add</button>
+                    <input type="text" onKeyDown={(e) => {e.key === "Enter" && this.checkData()}}  id="inp"/>
+                    <button className = "add command" onClick= {() => {this.checkData()}}>Add</button>
                 </>
             )
     }
