@@ -1,48 +1,30 @@
  import React from "react";
  import { connect } from "react-redux";
+ import { gridSize, imagesForGrid } from "../constants";
 
  class RoverGrid extends React.Component {
  	constructor(props) {
         super(props);
 
-        this.state={
-            obstacles:[],
-            goal:[],
-            path:[]
-        }
+        this.gridArray = [...Array(gridSize).keys()].map((i) => {
+            return [...Array(gridSize).keys()].map((j) => {
+                return (i * gridSize + j);
+            });
+        });
+        this.gridArray = this.gridArray.reverse()
 
         this.roverLastLocation = null
         this.goalLastLocation = null
-        this.roverImgfromdirection={
-            "NORTH":"rover_top.png",
-            "EAST":"rover_right.png",
-            "SOUTH":"rover_bot.png",
-            "WEST":"rover_left.png",
-            "OBSTACLE":"obstacle.png",
-            "GOAL": "goal.png",
-            "AUTOSEARCH": "rover_ghost.png"
-        }
+        
  	}
+
      componentDidMount() {
+            console.log(this.gridArray)
             this.createRoverImg(this.props.x,this.props.y,"Rover")
-        //     this.setState({
-        //     obstacles:this.props.obstacles,
-        //     goal:this.props.goal,
-        //     path:this.props.path
-        // })
     }
 
     componentDidUpdate(prevProps) {
-        // if (prevProps != this.props){
-        //      if (this.props.reset){
-        //         this.state.obstacles.map(obs => {
-        //             this.removeImage((obs[0]),(obs[1]))
-        //         })
-        //         this.state.path.map(path => {
-        //             this.removeImage(path[0],path[1])
-        //         })
-        //         this.removeImage(this.state.goal[0],this.state.goal[1])
-        //     }
+        
             this.createRoverImg(this.props.x,this.props.y,"Rover")
             this.props.obstacles.map(obs => this.createRoverImg(obs[0],obs[1],"Obstacle"))
             if (this.props.goal!=[])
@@ -55,13 +37,6 @@
                     this.createRoverImg(path[0],path[1],"AUTOSEARCH")
                 })
             }
-           
-        //     this.setState({
-        //         obstacles:this.props.obstacles,
-        //         goal:this.props.goal,
-        //         path:this.props.path
-        //     })
-        // }
     }
     removeImage(x,y){
         let number = this.getNumberOfRovers(x,y);
@@ -73,16 +48,16 @@
         
         if(img == "Rover"){
             document.getElementById("img_"+this.roverLastLocation)?.setAttribute("src","")
-            rover.setAttribute("src", this.roverImgfromdirection[this.props.direction])
+            rover.setAttribute("src", imagesForGrid[this.props.direction])
             this.roverLastLocation = number
         }else if (img == "Obstacle"){
-            rover.setAttribute("src", this.roverImgfromdirection.OBSTACLE)
+            rover.setAttribute("src", imagesForGrid.OBSTACLE)
         }else if (img == "AUTOSEARCH"){
-            rover.setAttribute("src", this.roverImgfromdirection.AUTOSEARCH)
+            rover.setAttribute("src", imagesForGrid.AUTOSEARCH)
         }
         else{
             document.getElementById("img_"+this.goalLastLocation)?.setAttribute("src","")
-            rover?.setAttribute("src", this.roverImgfromdirection.GOAL)
+            rover?.setAttribute("src", imagesForGrid.GOAL)
             this.goalLastLocation = number
         }
 
@@ -90,28 +65,32 @@
 
     getNumberOfRovers(x,y){
         while (x<0)
-            x+=10
+            x+=gridSize
         while (y<0)
-            y+=10
-        x %= 10
-        y %= 10 
-        return y*10+x
+            y+=gridSize
+        x %= gridSize
+        y %= gridSize
+        return y*gridSize+x
     }
+
+    
+
  	render() {
  		return (
  			<>
- 				<div className="grid-container">
+ 				<div className="grid-container" style = {
+                {"grid-template-columns" : `repeat(${gridSize}, 1fr)`,
+                "grid-template-rows": `repeat(${gridSize}, 1fr)`}
+                }>
                     {
-                        [ ...Array(100).reverse().keys() ].map((i)=>{
-                            i=99-i
-                            let j =0
-                            i < 10 ? j=0 : j = parseInt(i / 10)
-                            j*=10
-                            i = i % 10
-                            let id = j+9-i
-                            return <div className="grid-item" id = {id} key={j+9-i}>
-                                <img id = {"img_"+id}/>
-                            </div>
+                        this.gridArray.map((arr)=>{
+                            return arr.map((i)=>{
+                                return <div className="grid-item" 
+                                        id = {""+i} 
+                                        key={""+i}>
+                                    <img id = {"img_"+i}/>
+                                </div>        
+                            })
                         })
                     }
 

@@ -1,3 +1,4 @@
+const { gridSize } = require('../constants');
 const reduce = require('../store/rover.reducer');
 
 
@@ -32,12 +33,12 @@ describe ("Testing Class Rover in the rover.reducer", () => {
         rover.reset()
         rover['r']()
         rover['b']()
-        expect(rover['location']['x']).toEqual(9)
+        expect(rover['location']['x']).toEqual(gridSize-1)
     })
     it ('Check rover doesnot go out of the grid not bigger than 9 for Y Axises', () => {
         let rover = reduce.roverReducer
         rover.reset()
-        for (let i =0 ; i < 11; i++) {
+        for (let i =0 ; i < gridSize+1; i++) {
             rover['f']()
         }
         expect(rover['location']['x']).toEqual(0)
@@ -47,14 +48,14 @@ describe ("Testing Class Rover in the rover.reducer", () => {
         let rover = reduce.roverReducer
         rover.reset()
         rover['b']()
-        expect(rover['location']['y']).toEqual(9)
+        expect(rover['location']['y']).toEqual(gridSize-1)
     })
 
     it ("check rover doesnot go out of the grid not bigger than 9 for Y Axises", () => {
         let rover = reduce.roverReducer
         rover.reset()
         rover.r()
-        for(let i = 0 ; i<11 ; i++){
+        for(let i = 0 ; i<gridSize+1 ; i++){
             rover.f()
         }
         expect(rover['location']['y']).toEqual(0)
@@ -121,13 +122,6 @@ describe ("Testing Class Rover in the rover.reducer", () => {
         rover.resetGoal()
         expect(rover['goal']['coord']).toEqual([])
         expect(rover['goal']['reached']).toEqual(false)
-    })
-
-    it("test creating 10x10 elements in Array", () => {
-        let arr = Array(10).fill(Array(10).fill(10))
-
-        expect(arr[0][0]).toEqual(10)
-        expect(arr[9].length).toEqual(10)
     })
 
     // The check for the last part Task 3 the search algorithm
@@ -209,8 +203,8 @@ describe ("Testing Class Rover in the rover.reducer", () => {
 
         rover.addObstacle(1,0)
         rover.addObstacle(0,1)
-        rover.addObstacle(0,9)
-        rover.addObstacle(9,0)
+        rover.addObstacle(0,gridSize-1)
+        rover.addObstacle(gridSize-1,0)
 
         rover.autoSearch()
         
