@@ -7,20 +7,9 @@ class InputComponent extends React.Component {
         super(props);
     }
 
-    // checkData() {
-    //     let inp = document.getElementById("inp");
-    //     if (!(inp.value.match("^[FLBRflbr]+$"))) {
-    //         alert("Invalid Input");
-    //         inp.value = ""
-    //         return
-    //     }
-    //     for (let i in inp.value) {
-    //         this.props.submitData(inp.value[i].toLowerCase());
-    //     }
-    // }
-
+   
     createObject() {
-        let inp = document.getElementById("inp");
+        let inp = document.getElementById(this.props.text);
         if (!(inp.value.match("^[0-9 -]+,[0-9 -]+$"))) {
             alert("Invalid Input");
             inp.value = ""
@@ -36,14 +25,15 @@ class InputComponent extends React.Component {
             return
         }
         // console.log("INput : ", inp.value.split(","));
-        this.props.addGoal(inp.value.split(","));
+        this.props.onClick(inp.value.split(",")[0],inp.value.split(",")[1]);
     }
 
     render() {
         return (
-            <div>
-                <input type="text"  id="inp"/>
-                <button className = "add command" onClick= {() => {this.checkData()}}>Add</button>
+            <div className = "container">
+                <p>{this.props.text}</p>
+                <input type="text"  id={this.props.text} onKeyDown={(e) => {e.key === "Enter" && this.createObject()}}/>
+                <button className = "add" onClick= {() => {this.createObject()}}>Add</button>
             </div>
         )
     }
@@ -56,3 +46,5 @@ const mapStateToProps = (state) => {
         y: state.location.y
     }
 }
+
+export default connect (mapStateToProps,null)(InputComponent);
