@@ -94,6 +94,11 @@ label{
   font-weight: bold;
   font-size: 20px;
 }
+.reached{
+  color: rgb(17, 170, 17);
+  font-weight: bold;
+  font-size: 20px;
+}
 
 /* CSS */
 #searchButton {
