@@ -5,15 +5,9 @@
  	constructor(props) {
         super(props);
 
-        this.state={
-            obstacles:[],
-            goal:[],
-            path:[]
-        }
-
         this.roverLastLocation = null
         this.goalLastLocation = null
-        this.roverImgfromdirection={
+        this.imagesForGrid={
             "NORTH":"rover_top.png",
             "EAST":"rover_right.png",
             "SOUTH":"rover_bot.png",
@@ -25,24 +19,10 @@
  	}
      componentDidMount() {
             this.createRoverImg(this.props.x,this.props.y,"Rover")
-        //     this.setState({
-        //     obstacles:this.props.obstacles,
-        //     goal:this.props.goal,
-        //     path:this.props.path
-        // })
     }
 
     componentDidUpdate(prevProps) {
-        // if (prevProps != this.props){
-        //      if (this.props.reset){
-        //         this.state.obstacles.map(obs => {
-        //             this.removeImage((obs[0]),(obs[1]))
-        //         })
-        //         this.state.path.map(path => {
-        //             this.removeImage(path[0],path[1])
-        //         })
-        //         this.removeImage(this.state.goal[0],this.state.goal[1])
-        //     }
+        
             this.createRoverImg(this.props.x,this.props.y,"Rover")
             this.props.obstacles.map(obs => this.createRoverImg(obs[0],obs[1],"Obstacle"))
             if (this.props.goal!=[])
@@ -55,13 +35,7 @@
                     this.createRoverImg(path[0],path[1],"AUTOSEARCH")
                 })
             }
-           
-        //     this.setState({
-        //         obstacles:this.props.obstacles,
-        //         goal:this.props.goal,
-        //         path:this.props.path
-        //     })
-        // }
+        
     }
     removeImage(x,y){
         let number = this.getNumberOfRovers(x,y);
@@ -73,16 +47,16 @@
         
         if(img == "Rover"){
             document.getElementById("img_"+this.roverLastLocation)?.setAttribute("src","")
-            rover.setAttribute("src", this.roverImgfromdirection[this.props.direction])
+            rover.setAttribute("src", this.imagesForGrid[this.props.direction])
             this.roverLastLocation = number
         }else if (img == "Obstacle"){
-            rover.setAttribute("src", this.roverImgfromdirection.OBSTACLE)
+            rover.setAttribute("src", this.imagesForGrid.OBSTACLE)
         }else if (img == "AUTOSEARCH"){
-            rover.setAttribute("src", this.roverImgfromdirection.AUTOSEARCH)
+            rover.setAttribute("src", this.imagesForGrid.AUTOSEARCH)
         }
         else{
             document.getElementById("img_"+this.goalLastLocation)?.setAttribute("src","")
-            rover?.setAttribute("src", this.roverImgfromdirection.GOAL)
+            rover?.setAttribute("src", this.imagesForGrid.GOAL)
             this.goalLastLocation = number
         }
 
@@ -102,7 +76,7 @@
  			<>
  				<div className="grid-container">
                     {
-                        [ ...Array(100).reverse().keys() ].map((i)=>{
+                        [ ...Array(gridSize).reverse().keys() ].map((i)=>{
                             i=99-i
                             let j =0
                             i < 10 ? j=0 : j = parseInt(i / 10)
