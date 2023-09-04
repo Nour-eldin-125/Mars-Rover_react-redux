@@ -3,7 +3,8 @@
  import { gridSize, imagesForGrid } from "../constants";
 
  class RoverGrid extends React.Component {
- 	constructor(props) {
+
+    constructor(props) {
         super(props);
 
         this.gridArray = [...Array(gridSize).keys()].map((i) => {
@@ -19,7 +20,6 @@
  	}
 
      componentDidMount() {
-            console.log(this.gridArray)
             this.createRoverImg(this.props.x,this.props.y,"Rover")
     }
 
@@ -38,10 +38,12 @@
                 })
             }
     }
+
     removeImage(x,y){
         let number = this.getNumberOfRovers(x,y);
         document.getElementById("img_"+number)?.setAttribute("src","")    
     }
+
     createRoverImg(x,y,img){
         let number = this.getNumberOfRovers(x,y);
         let rover = document.getElementById("img_"+number);
@@ -72,8 +74,6 @@
         y %= gridSize
         return y*gridSize+x
     }
-
-    
 
  	render() {
  		return (
