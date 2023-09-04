@@ -173,6 +173,8 @@ class Rover {
 		if (this.stuck) {
 			return;
 		}
+        this.nextStep.safe = true
+		this.path = []
 		this.calculateHueristics();
 		let x = this.location.x;
 		let y = this.location.y;
@@ -233,8 +235,6 @@ class Rover {
                 x = point[0];
                 y = point[1];
                 this.path.push([x,y])
-                // this.path.pop()
-                // this.path.push(point)
                 nextDirection = [
                     [x, getRealValue(y + 1)], // Top
                     [getRealValue(x + 1), y], // Right
@@ -337,6 +337,7 @@ export default function reducer(state = initialState, action) {
 				path: [...state.rover.path],
 				stuck: state.rover.stuck,
 				goal: { ...state.rover.goal },
+                safe: state.rover.nextStep.safe,
 			};
 		}
 
