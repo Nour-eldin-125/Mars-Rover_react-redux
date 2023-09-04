@@ -78,7 +78,7 @@ class Rover {
 		x += point[0] * -1;
 		y += point[1] * -1;
 
-		this.updateRover(x, y);
+		this.updateRover(getRealValue(x), getRealValue(y));
 	};
 
 	l = function () {
@@ -99,8 +99,8 @@ class Rover {
 		let safe = !checkItemInArray(this.obstacles, [x, y]);
 		let reachedGoal = x == this.goal.coord[0] && y == this.goal.coord[1];
 		if (safe && !reachedGoal) {
-			this.location.x = getRealValue(x);
-			this.location.y = getRealValue(y);
+			this.location.x = x;
+			this.location.y = y;
 		}
 		safe ? (this.nextStep.safe = true) : (this.nextStep.safe = false);
 		reachedGoal ? (this.goal.reached = true) : (this.goal.reached = false);
