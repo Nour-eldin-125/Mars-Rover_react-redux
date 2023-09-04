@@ -101,20 +101,13 @@
 }
 const mapStateToProps = (state) => {
     return {
-        // location: state.location,
         x: state.location.x,
         y: state.location.y,
         direction: state.location.direction,
-        // obstacles: state.rover.getObstacles(),
         goal: state.goal,
         path: state.path,
         autoSearch: state.autoSearch,
         obstacles: state.obstacles,
-        // safe: state.safe,
-        // goal: state.goal,
-        // path: state.path,
-        // autoSearch: state.autoSearch,
-        // reset: state.reset
     }
 }
 

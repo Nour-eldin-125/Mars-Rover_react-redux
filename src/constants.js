@@ -1,4 +1,4 @@
-export const gridSize = 12
+export const gridSize = 10
 export const imagesForGrid={
     "NORTH":"rover_top.png",
     "EAST":"rover_right.png",
